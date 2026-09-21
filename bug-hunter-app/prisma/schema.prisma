@@ -1,0 +1,73 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  STUDENT
+  CREATOR
+  ADMIN
+}
+
+enum Difficulty {
+  FACIL
+  MEDIO
+  DIFICIL
+}
+
+enum TaskStatus {
+  EN_DESARROLLO
+  PR_ENVIADO
+  COMPLETADO
+  EXPIRADO
+  CANCELADO
+}
+
+model User {
+  id             String           @id @default(uuid())
+  name           String
+  email          String           @unique
+  githubUsername String?          @unique
+  role           Role             @default(STUDENT)
+  createdAt      DateTime         @default(now())
+  challenges     Challenge[]
+  assignments    TaskAssignment[]
+}
+
+model Challenge {
+  id          String           @id @default(uuid())
+  title       String
+  description String           @db.Text
+  difficulty  Difficulty
+  techStack   String[]
+  repoUrl     String
+  creatorId   String
+  creator     User             @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  createdAt   DateTime         @default(now())
+  assignments TaskAssignment[]
+}
+
+model TaskAssignment {
+  id          String      @id @default(uuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challengeId String
+  challenge   Challenge   @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  status      TaskStatus  @default(EN_DESARROLLO)
+  branchName  String
+  expiresAt   DateTime
+  createdAt   DateTime    @default(now())
+  auditLogs   AuditLog[]
+}
+
+model AuditLog {
+  id           String         @id @default(uuid())
+  assignmentId String
+  assignment   TaskAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  eventPayload Json
+  receivedAt   DateTime       @default(now())
+}
