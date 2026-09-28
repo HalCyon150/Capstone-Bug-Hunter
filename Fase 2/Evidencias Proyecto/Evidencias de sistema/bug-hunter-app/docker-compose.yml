@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: bughunter-postgres
+    container_name: bughunter-postgres-martin
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}

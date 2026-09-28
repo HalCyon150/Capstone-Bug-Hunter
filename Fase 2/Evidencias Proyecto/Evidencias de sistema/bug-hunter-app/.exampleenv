@@ -2,3 +2,9 @@ POSTGRES_USER=postgres
 POSTGRES_PASSWORD=clavebd
 POSTGRES_DB=bughunter
 DATABASE_URL="postgresql://postgres:tu_clave_aqui@localhost:5432/bughunter?schema=public"
+
+
+BETTER_AUTH_SECRET=
+AUTH_GITHUB_ID=
+AUTH_GITHUB_SECRET=
+
