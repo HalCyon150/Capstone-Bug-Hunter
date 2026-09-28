@@ -32,7 +32,7 @@ model User {
   name           String
   email          String           @unique
   githubUsername String?          @unique
-  role           Role             @default(HUNTER)
+  role           Role             @default(STUDENT)
   createdAt      DateTime         @default(now())
 
 
